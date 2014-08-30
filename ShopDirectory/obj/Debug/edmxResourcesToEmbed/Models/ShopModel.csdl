@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="ShopEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Products" EntityType="Model.Product" />
+    <EntitySet Name="Shops" EntityType="Model.Shop" />
+    <EntitySet Name="shopProducts" EntityType="Model.shopProduct" />
+    <AssociationSet Name="FK_shopProduct_ToProduct" Association="Model.FK_shopProduct_ToProduct">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="shopProduct" EntitySet="shopProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_shopProduct_ToShop" Association="Model.FK_shopProduct_ToShop">
+      <End Role="Shop" EntitySet="Shops" />
+      <End Role="shopProduct" EntitySet="shopProducts" />
+    </AssociationSet>
+    <AssociationSet Name="ShopProduct1" Association="Model.ShopProduct1">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Shop" EntitySet="Shops" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="Double" Name="Price" Nullable="false" />
+    <Property Type="String" Name="Category" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="shopProducts" Relationship="Model.FK_shopProduct_ToProduct" FromRole="Product" ToRole="shopProduct" />
+    <NavigationProperty Name="Shops" Relationship="Model.ShopProduct1" FromRole="Product" ToRole="Shop" />
+  </EntityType>
+  <EntityType Name="Shop">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Address" MaxLength="500" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="Email" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Phone" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="Type" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="Int32" Name="UserId" />
+    <NavigationProperty Name="shopProducts" Relationship="Model.FK_shopProduct_ToShop" FromRole="Shop" ToRole="shopProduct" />
+    <NavigationProperty Name="Products" Relationship="Model.ShopProduct1" FromRole="Shop" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="shopProduct">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Type="Int32" Name="ProductId" Nullable="false" />
+    <Property Type="Int32" Name="ShopId" Nullable="false" />
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="Model.FK_shopProduct_ToProduct" FromRole="shopProduct" ToRole="Product" />
+    <NavigationProperty Name="Shop" Relationship="Model.FK_shopProduct_ToShop" FromRole="shopProduct" ToRole="Shop" />
+  </EntityType>
+  <Association Name="FK_shopProduct_ToProduct">
+    <End Type="Model.Product" Role="Product" Multiplicity="1" />
+    <End Type="Model.shopProduct" Role="shopProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="shopProduct">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_shopProduct_ToShop">
+    <End Type="Model.Shop" Role="Shop" Multiplicity="1" />
+    <End Type="Model.shopProduct" Role="shopProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Shop">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="shopProduct">
+        <PropertyRef Name="ShopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ShopProduct1">
+    <End Type="Model.Product" Role="Product" Multiplicity="*" />
+    <End Type="Model.Shop" Role="Shop" Multiplicity="*" />
+  </Association>
+</Schema>

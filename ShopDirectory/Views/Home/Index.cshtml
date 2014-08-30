@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <section>
+                <p>
+
+                    @using (Html.BeginForm("Index", "Search", FormMethod.Post))
+                    {    
+                        <span>Search:    
+                           @Html.DropDownList("criteria")
+
+                            @Html.TextBox("searchString")
+                            <input type="submit" value="Search" />
+                        </span> 
+                    }
+                </p>
+
+            </section>
+        </div>
+    </section>
+}

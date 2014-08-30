@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="ShopContext" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Products" EntityType="Model.Product" />
+    <EntitySet Name="Shops" EntityType="Model.Shop" />
+    <AssociationSet Name="ShopProduct" Association="Model.ShopProduct">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Shop" EntitySet="Shops" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Double" Nullable="false" />
+    <Property Name="Category" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="Shops" Relationship="Model.ShopProduct" FromRole="Product" ToRole="Shop" />
+  </EntityType>
+  <EntityType Name="Shop">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="Address" Type="String" MaxLength="500" Unicode="true" FixedLength="true" />
+    <Property Name="Email" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="Phone" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+    <Property Name="Type" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+    <Property Name="UserId" Type="Int32" />
+    <NavigationProperty Name="Products" Relationship="Model.ShopProduct" FromRole="Shop" ToRole="Product" />
+  </EntityType>
+  <Association Name="ShopProduct">
+    <End Role="Product" Type="Model.Product" Multiplicity="*" />
+    <End Role="Shop" Type="Model.Shop" Multiplicity="*" />
+  </Association>
+</Schema>

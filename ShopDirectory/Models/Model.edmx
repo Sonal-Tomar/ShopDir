@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Product" EntityType="Model.Store.Product" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Shop" EntityType="Model.Store.Shop" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ShopProduct" EntityType="Model.Store.ShopProduct" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_product" Association="Model.Store.FK_product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ShopProduct" EntitySet="ShopProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_shop" Association="Model.Store.FK_shop">
+            <End Role="Shop" EntitySet="Shop" />
+            <End Role="ShopProduct" EntitySet="ShopProduct" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="50" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Shop">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="150" />
+          <Property Name="Address" Type="nchar" MaxLength="500" />
+          <Property Name="Email" Type="nvarchar" MaxLength="150" />
+          <Property Name="Phone" Type="nchar" MaxLength="10" />
+          <Property Name="Type" Type="nchar" MaxLength="10" />
+          <Property Name="UserId" Type="int" />
+        </EntityType>
+        <EntityType Name="ShopProduct">
+          <Key>
+            <PropertyRef Name="shop_id" />
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="shop_id" Type="int" Nullable="false" />
+          <Property Name="product_id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_product">
+          <End Role="Product" Type="Model.Store.Product" Multiplicity="1" />
+          <End Role="ShopProduct" Type="Model.Store.ShopProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShopProduct">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_shop">
+          <End Role="Shop" Type="Model.Store.Shop" Multiplicity="1" />
+          <End Role="ShopProduct" Type="Model.Store.ShopProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShopProduct">
+              <PropertyRef Name="shop_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ShopContext" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Products" EntityType="Model.Product" />
+          <EntitySet Name="Shops" EntityType="Model.Shop" />
+          <AssociationSet Name="ShopProduct" Association="Model.ShopProduct">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Shop" EntitySet="Shops" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Shops" Relationship="Model.ShopProduct" FromRole="Product" ToRole="Shop" />
+        </EntityType>
+        <EntityType Name="Shop">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="150" Unicode="true" FixedLength="false" />
+          <Property Name="Address" Type="String" MaxLength="500" Unicode="true" FixedLength="true" />
+          <Property Name="Email" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="Type" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="Products" Relationship="Model.ShopProduct" FromRole="Shop" ToRole="Product" />
+        </EntityType>
+        <Association Name="ShopProduct">
+          <End Role="Product" Type="Model.Product" Multiplicity="*" />
+          <End Role="Shop" Type="Model.Shop" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="ShopContext">
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="Model.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shops">
+            <EntityTypeMapping TypeName="Model.Shop">
+              <MappingFragment StoreEntitySet="Shop">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ShopProduct" TypeName="Model.ShopProduct" StoreEntitySet="ShopProduct">
+            <EndProperty Name="Product">
+              <ScalarProperty Name="Id" ColumnName="product_id" />
+            </EndProperty>
+            <EndProperty Name="Shop">
+              <ScalarProperty Name="Id" ColumnName="shop_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

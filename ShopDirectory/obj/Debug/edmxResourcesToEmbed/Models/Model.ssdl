@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Product" EntityType="Model.Store.Product" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Shop" EntityType="Model.Store.Shop" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ShopProduct" EntityType="Model.Store.ShopProduct" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_product" Association="Model.Store.FK_product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ShopProduct" EntitySet="ShopProduct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_shop" Association="Model.Store.FK_shop">
+      <End Role="Shop" EntitySet="Shop" />
+      <End Role="ShopProduct" EntitySet="ShopProduct" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Price" Type="float" Nullable="false" />
+    <Property Name="Category" Type="varchar" MaxLength="50" />
+    <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Shop">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="150" />
+    <Property Name="Address" Type="nchar" MaxLength="500" />
+    <Property Name="Email" Type="nvarchar" MaxLength="150" />
+    <Property Name="Phone" Type="nchar" MaxLength="10" />
+    <Property Name="Type" Type="nchar" MaxLength="10" />
+    <Property Name="UserId" Type="int" />
+  </EntityType>
+  <EntityType Name="ShopProduct">
+    <Key>
+      <PropertyRef Name="shop_id" />
+      <PropertyRef Name="product_id" />
+    </Key>
+    <Property Name="shop_id" Type="int" Nullable="false" />
+    <Property Name="product_id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_product">
+    <End Role="Product" Type="Model.Store.Product" Multiplicity="1" />
+    <End Role="ShopProduct" Type="Model.Store.ShopProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ShopProduct">
+        <PropertyRef Name="product_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_shop">
+    <End Role="Shop" Type="Model.Store.Shop" Multiplicity="1" />
+    <End Role="ShopProduct" Type="Model.Store.ShopProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Shop">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ShopProduct">
+        <PropertyRef Name="shop_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

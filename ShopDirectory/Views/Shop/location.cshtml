@@ -1,0 +1,25 @@
+﻿@model ShopDirectory.Models.ShopContext
+
+@{
+    ViewBag.Title = "location";
+}
+
+<h2>location</h2>
+<section>
+    <p>
+
+
+        @using (Html.BeginForm("location", "Location", FormMethod.Post ))
+        {    
+            <span>
+
+                <input type="submit" value="get location" />
+
+                   
+            </span> 
+        }
+    </p>
+
+
+
+</section>
