@@ -38,13 +38,13 @@ namespace ShopDirectory.Controllers
             {
                 case "0":
                     //shop
-                    results = searcher.SearchShop(searchString);
+                    results = searcher.SearchByShopName(searchString);
                     break;
 
-                //case "1": 
-                //    // product
-                //    results = searcher.SearchProduct(searchString);
-                //    break;
+                case "1":
+                    // product
+                    results = searcher.SearchByProductName(searchString);
+                    break;
 
                 //case "2":
                 //    // category

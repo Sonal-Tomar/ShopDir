@@ -1,4 +1,5 @@
-﻿using ShopDirectory.Models;
+﻿using DotNetOpenAuth.Messaging;
+using ShopDirectory.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +9,16 @@ namespace ShopDirectory.Utility
 {
     public class Searcher
     {
-        private readonly ShopContext context;
+        private readonly ShopContext _context;
 
         public Searcher(ShopContext context)
         {
-            this.context = context;
+            this._context = context;
         }
 
-        public IEnumerable<Shop> SearchShop(string keyword)
+        public IEnumerable<Shop> SearchByShopName(string shop)
         {
-            return context.Shops.Where(s => s.Name.Contains(keyword));
+            return _context.Shops.Where(s => s.Name.Contains(shop));
         }
 
         //public IEnumerable<Shop> SearchProduct(string keyword)
@@ -27,20 +28,20 @@ namespace ShopDirectory.Utility
         //           select shop;
         //}
         //}
-       
-          public IEnumerable<Shop> SearchProduct(string keyword)
-      
 
-          {
-                       var query = from c in context.Products
-                                   join a in context.ShopProduct
-                                   on c.Id equals a.ShopProduct
-                                   where c.ContactId != _contactId1
-                                   select new { Contact = c, Account = a };
+        public IEnumerable<Shop> SearchByProductName(string keyword)
+        {
+            //http://smehrozalam.wordpress.com/2010/06/29/entity-framework-queries-involving-many-to-many-relationship-tables/
+           var shops = from s in _context.Shops
+                       from p in _context.Products
+                          where s.Products.Contains(p)
+                        select s;
+            
+            return shops;
 
-          }
+        }
 
-         //public IEnumerable<Shop> SearchCategory(string keyword)
+        //public IEnumerable<Shop> SearchCategory(string keyword)
         //{
         //    return null;
         //}
